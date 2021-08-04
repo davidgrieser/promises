@@ -79,6 +79,9 @@ document.body.querySelector('#createPromise').addEventListener('click', () => {
 
     promise.then((success) => {
         processSuccess(success);
+        return createPromise();
+    }).then((success) => {
+        processSuccess(success);
     }).catch((error) => {
         if(error['name'] === 'Error') {
             console.error(error);
