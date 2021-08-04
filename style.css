@@ -3,6 +3,18 @@ section, article {
     vertical-align: middle;
 }
 
+article {
+    margin: 10px;
+}
+
+article > span {
+    margin: 10px;
+}
+
+article > button {
+    margin: 5px;
+}
+
 .box {
     min-height: 50px;
     min-width: 50px;
@@ -17,4 +29,12 @@ section, article {
 .red {
     background: red;
     color: white;
+}
+
+.error {
+    color: red;
+}
+
+.success {
+    color: green;
 }
