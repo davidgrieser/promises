@@ -43,11 +43,11 @@ const createPromise = () => {
         setButtons(question, false)
         question.querySelector('.yes').addEventListener('click', () => {
             const result = { timeTaken: elapsedTime(startTime, new Date()), answer: true, id: question.getAttribute('id') }
-            resolve(result);
+            resolve(result); // Important Bit
         });
         question.querySelector('.no').addEventListener('click', () => {
             const result = { timeTaken: elapsedTime(startTime, new Date()), answer: false, id: question.getAttribute('id')  }
-            reject(result);
+            reject(result); // Important Bit
         })
     });
 
