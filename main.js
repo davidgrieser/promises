@@ -32,6 +32,9 @@ const setButtons = (parentElement, state) => {
         button.disabled = state;
     }
 }
+function getRandomArbitrary(min, max) {
+    return Math.random() * (max - min) + min;
+  }
 
 const processSuccess = (success) => {
     const resultElement = document.getElementById(success['id']).querySelector('.result')
@@ -51,18 +54,19 @@ const createPromise = () => {
     const question = createQuestion();
     return new Promise((resolve, reject) => {
         const startTime = new Date();
-        // if (document.querySelector('#throwToggle').checked) {
-        //     throw "What do you mean you don't know?";
-        // }
+        if (document.querySelector('#throwToggle').checked) {
+            throw "What do you mean you don't know?";
+        }
         setButtons(question, false)
-        question.querySelector('.yes').addEventListener('click', () => {
+        setTimeout(() => {
             const result = { timeTaken: elapsedTime(startTime, new Date()), answer: true, id: question.getAttribute('id') }
             resolve(result); // Important Bit
-        });
-        question.querySelector('.no').addEventListener('click', () => {
+        }, getRandomArbitrary(1000, 10000));
+
+        setTimeout(() => {
             const result = { timeTaken: elapsedTime(startTime, new Date()), answer: false, id: question.getAttribute('id')  }
             reject(result); // Important Bit
-        })
+        }, getRandomArbitrary(1000, 10000));
     });
 
 }
@@ -81,4 +85,5 @@ document.body.querySelector('#createPromise').addEventListener('click', () => {
         console.log('Promise Finished');
         console.log(promise)
     });
+
 })
