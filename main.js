@@ -13,9 +13,11 @@ const createQuestion = () => {
     const yesButton = document.createElement('button');
     yesButton.classList.add('yes');
     yesButton.innerText = 'Yes';
+    yesButton.disabled = true;
     const noButton = document.createElement('button');
     noButton.classList.add('no');
     noButton.innerText = 'No';
+    noButton.disabled = true;
     const questionResult = document.createElement('span');
     questionResult.classList.add('result')
     article.appendChild(questionText);
@@ -23,6 +25,11 @@ const createQuestion = () => {
     article.appendChild(noButton);
     article.appendChild(questionResult);
     return article;
+}
+const setButtons = (parentElement, state) => {
+    for(let button of parentElement.querySelectorAll('button')){
+        button.disabled = state;
+    }
 }
 
 const createPromise = () => {
@@ -33,6 +40,7 @@ const createPromise = () => {
         if (document.querySelector('#throwToggle').checked) {
             throw "What do you mean you don't know?";
         }
+        setButtons(question, false)
         question.querySelector('.yes').addEventListener('click', () => {
             const result = { timeTaken: elapsedTime(startTime, new Date()), answer: true, id: question.getAttribute('id') }
             resolve(result);
@@ -45,19 +53,15 @@ const createPromise = () => {
 
 }
 
-const processThen = (success) => {
-    document.getElementById(success['id']).querySelector('.result').innerText = success['timeTaken']
-    const resultElement = document.getElementById(success['id']).querySelector('.result')
-    resultElement.innerText = success['timeTaken']
-    resultElement.classList.add('success');
-}
-
 document.body.querySelector('#createPromise').addEventListener('click', () => {
-    console.log("Promise Created")
     let promise = createPromise();
+    console.log("Promise Created")
     console.log(promise);
     promise.then((success) => {
-        processThen(success)
+        const resultElement = document.getElementById(success['id']).querySelector('.result')
+        resultElement.innerText = success['timeTaken']
+        resultElement.classList.add('success');
+        setButtons(resultElement.parentElement, true)
     }).catch((error) => {
         if(error['name'] === 'Error') {
             console.error(error)
@@ -65,9 +69,10 @@ document.body.querySelector('#createPromise').addEventListener('click', () => {
             const resultElement = document.getElementById(error['id']).querySelector('.result')
             resultElement.innerText = error['timeTaken']
             resultElement.classList.add('error');
+            setButtons(resultElement.parentElement, true)
         }
     }).finally(() => {
-        console.log(promise)
         console.log('Promise Finished');
+        console.log(promise)
     });
 })
