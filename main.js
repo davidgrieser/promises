@@ -55,7 +55,7 @@ const createPromise = () => {
     return new Promise((resolve, reject) => {
         const startTime = new Date();
         if (document.querySelector('#throwToggle').checked) {
-            throw "What do you mean you don't know?";
+            throw Error("What do you mean you don't know?");
         }
         setButtons(question, false)
         setTimeout(() => {
@@ -80,7 +80,11 @@ document.body.querySelector('#createPromise').addEventListener('click', () => {
     promise.then((success) => {
         processSuccess(success);
     }).catch((error) => {
-        processError(error);
+        if(error['name'] === 'Error') {
+            console.error(error);
+        } else {
+            processError(error);
+        }
     }).finally(() => {
         console.log('Promise Finished');
         console.log(promise)
