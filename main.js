@@ -2,9 +2,9 @@ let promises = [];
 const elapsedTime = (t1, t2) => {
     return t2 - t1;
 }
-document.body.querySelector('#createPromise').addEventListener('click', () => {
-    console.log("Promise Created")
-    let promise = new Promise((resolve, reject) => {
+
+const createPromise = () => {
+    return new Promise((resolve, reject) => {
         const startTime = new Date();
         if (document.querySelector('#throwToggle').checked) {
             throw "What do you mean you don't know?";
@@ -19,21 +19,43 @@ document.body.querySelector('#createPromise').addEventListener('click', () => {
         })
     });
 
+}
+document.body.querySelector('#createPromise').addEventListener('click', () => {
+    console.log("Promise Created")
+    let promise = createPromise();
+    promises.push(promise);
     console.log(promise);
-    promise.then((successMessage) => {
-        console.log(promise);
-        console.log(successMessage);
-    }).then((result) => {
-        console.info(`Before Catch: <${result}>`);
+    console.log(promises);
+    // promise.then((successMessage) => {
+    //     console.log(promise);
+    //     console.log(successMessage);
+    // }).then((result) => {
+    //     console.info(`Before Catch: <${result}>`);
+    // }).catch((error) => {
+    //     console.log(promise);
+    //     console.error(error)
+    // }).then(() => {
+    //     console.info("Extra Call")
+    // }).finally(() => {
+    //     console.log(promise);
+    //     console.log('Promise Finished');
+    // });
+})
+
+document.querySelector('#resolveAll').addEventListener('click', () => {
+    Promise.all(promises).then((results) => {
+        for(let result of results) {
+            const answer = document.createElement('p');
+            answer.innerText = result['answer']
+            const timeTaken = document.createElement('p');
+            timeTaken.innerText = result['timeTaken']
+            document.querySelector('#correct').appendChild(answer);
+            document.querySelector('#times').appendChild(timeTaken);
+        }
+        promises = [];
     }).catch((error) => {
-        console.log(promise);
-        console.error(error)
-    }).then(() => {
-        console.info("Extra Call")
-    }).finally(() => {
-        console.log(promise);
-        console.log('Promise Finished');
-    });
+
+    })
 })
 
 window.addEventListener('load', () => {
