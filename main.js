@@ -57,22 +57,22 @@ document.body.querySelector('#createPromise').addEventListener('click', () => {
     let promise = createPromise();
     console.log("Promise Created")
     console.log(promise);
-    promise.then((success) => {
-        const resultElement = document.getElementById(success['id']).querySelector('.result')
-        resultElement.innerText = success['timeTaken']
-        resultElement.classList.add('success');
-        setButtons(resultElement.parentElement, true)
-    }).catch((error) => {
-        if(error['name'] === 'Error') {
-            console.error(error)
-        } else {
-            const resultElement = document.getElementById(error['id']).querySelector('.result')
-            resultElement.innerText = error['timeTaken']
-            resultElement.classList.add('error');
+    promise.then(
+        function(success) {
+            const resultElement = document.getElementById(success['id']).querySelector('.result')
+            resultElement.innerText = success['timeTaken']
+            resultElement.classList.add('success');
             setButtons(resultElement.parentElement, true)
+        },
+        function(error) {
+            if(typeof(error) === 'string') {
+                console.error(error)
+            } else {
+                const resultElement = document.getElementById(error['id']).querySelector('.result')
+                resultElement.innerText = error['timeTaken']
+                resultElement.classList.add('error');
+                setButtons(resultElement.parentElement, true)
+            }
         }
-    }).finally(() => {
-        console.log('Promise Finished');
-        console.log(promise)
-    });
+    )
 })
