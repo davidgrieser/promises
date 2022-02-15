@@ -68,16 +68,18 @@ const createAutomatedPromise = () => {
         if (document.querySelector('#throwToggle').checked) {
             throw Error("What do you mean you don't know?");
         }
+        const success = Math.random() * 100 < 50;
         setTimeout(() => {
-            const result = { timeTaken: elapsedTime(startTime, new Date()), answer: true, id: promiseElement.getAttribute('id') }
-            updateStatus(promiseElement.getAttribute('id'), 'fulfilled(resolve)')
-            resolve(result); // Important Bit
-        }, getRandomArbitrary(1000, 10000));
-
-        setTimeout(() => {
-            const result = { timeTaken: elapsedTime(startTime, new Date()), answer: false, id: promiseElement.getAttribute('id')  }
-            updateStatus(promiseElement.getAttribute('id'), 'rejected(reject)')
-            reject(result); // Important Bit
+            const result = { timeTaken: elapsedTime(startTime, new Date()), success: success, id: promiseElement.getAttribute('id') }
+            if(success) {
+                updateStatus(promiseElement.getAttribute('id'), 'fulfilled(resolve)')
+                promiseElement.querySelector('.resolve').classList.add('success');
+                resolve(result); // Important Bit
+            } else {
+                updateStatus(promiseElement.getAttribute('id'), 'rejected(reject)')
+                promiseElement.querySelector('.reject').classList.add('error');
+                reject(result); // Important Bit
+            }
         }, getRandomArbitrary(1000, 10000));
     });
 
@@ -94,12 +96,14 @@ const createManualPromise = () => {
     }
     setButtons(promiseElement, false);
     promiseElement.querySelector('.resolve').addEventListener('click', () => {
-        const result = { timeTaken: elapsedTime(startTime, new Date()), answer: true, id: promiseElement.getAttribute('id') }
+        const result = { timeTaken: elapsedTime(startTime, new Date()), success: true, id: promiseElement.getAttribute('id') }
+        promiseElement.querySelector('.resolve').classList.add('success');
         updateStatus(promiseElement.getAttribute('id'), 'fulfilled(resolve)')
         resolve(result);
     });
     promiseElement.querySelector('.reject').addEventListener('click', () => {
-        const result = { timeTaken: elapsedTime(startTime, new Date()), answer: false, id: promiseElement.getAttribute('id')  }
+        const result = { timeTaken: elapsedTime(startTime, new Date()), success: false, id: promiseElement.getAttribute('id')  }
+        promiseElement.querySelector('.reject').classList.add('error');
         updateStatus(promiseElement.getAttribute('id'), 'rejected(reject)')
         reject(result);
         })
