@@ -3,7 +3,7 @@ let promiseCounter = 0;
 const elapsedTime = (t1, t2) => {
     return t2 - t1;
 }
-const createEntry = () => {
+const createPromiseElement = () => {
     const disabledButtons = true;
     promiseCounter++;
     const article = document.createElement('article');
@@ -52,7 +52,7 @@ const processError = (error) => {
 }
 
 const createAutomatedPromise = () => {
-    const promiseElement = createEntry();
+    const promiseElement = createPromiseElement();
     return new Promise((resolve, reject) => {
         const startTime = new Date();
         if (document.querySelector('#throwToggle').checked) {
@@ -72,7 +72,7 @@ const createAutomatedPromise = () => {
 }
 
 const createManualPromise = () => {
-    const promiseElement = createEntry();
+    const promiseElement = createPromiseElement();
     document.querySelector('.promiseList').appendChild(promiseElement);
     return new Promise((resolve, reject) => {
     const startTime = new Date();
