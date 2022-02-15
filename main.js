@@ -52,19 +52,19 @@ const processError = (error) => {
 }
 
 const createAutomatedPromise = () => {
-    const question = createEntry();
+    const promiseElement = createEntry();
     return new Promise((resolve, reject) => {
         const startTime = new Date();
         if (document.querySelector('#throwToggle').checked) {
             throw Error("What do you mean you don't know?");
         }
         setTimeout(() => {
-            const result = { timeTaken: elapsedTime(startTime, new Date()), answer: true, id: question.getAttribute('id') }
+            const result = { timeTaken: elapsedTime(startTime, new Date()), answer: true, id: promiseElement.getAttribute('id') }
             resolve(result); // Important Bit
         }, getRandomArbitrary(1000, 10000));
 
         setTimeout(() => {
-            const result = { timeTaken: elapsedTime(startTime, new Date()), answer: false, id: question.getAttribute('id')  }
+            const result = { timeTaken: elapsedTime(startTime, new Date()), answer: false, id: promiseElement.getAttribute('id')  }
             reject(result); // Important Bit
         }, getRandomArbitrary(1000, 10000));
     });
@@ -72,20 +72,20 @@ const createAutomatedPromise = () => {
 }
 
 const createManualPromise = () => {
-    const question = createEntry();
-    document.querySelector('.promiseList').appendChild(question);
+    const promiseElement = createEntry();
+    document.querySelector('.promiseList').appendChild(promiseElement);
     return new Promise((resolve, reject) => {
     const startTime = new Date();
     if (document.querySelector('#throwToggle').checked) {
         throw "What do you mean you don't know?";
     }
-    setButtons(question, false);
-    question.querySelector('.resolve').addEventListener('click', () => {
-        const result = { timeTaken: elapsedTime(startTime, new Date()), answer: true, id: question.getAttribute('id') }
+    setButtons(promiseElement, false);
+    promiseElement.querySelector('.resolve').addEventListener('click', () => {
+        const result = { timeTaken: elapsedTime(startTime, new Date()), answer: true, id: promiseElement.getAttribute('id') }
         resolve(result);
     });
-    question.querySelector('.reject').addEventListener('click', () => {
-        const result = { timeTaken: elapsedTime(startTime, new Date()), answer: false, id: question.getAttribute('id')  }
+    promiseElement.querySelector('.reject').addEventListener('click', () => {
+        const result = { timeTaken: elapsedTime(startTime, new Date()), answer: false, id: promiseElement.getAttribute('id')  }
         reject(result);
         })
     });
