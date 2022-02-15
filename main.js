@@ -21,10 +21,13 @@ const createPromiseElement = () => {
     rejectButton.disabled = disabledButtons;
     const result = document.createElement('span');
     result.classList.add('result')
+    const status = document.createElement('span');
+    status.classList.add('status')
     article.appendChild(promiseText);
     article.appendChild(resolveButton);
     article.appendChild(rejectButton);
     article.appendChild(result);
+    article.appendChild(status);
     document.querySelector('.promiseList').appendChild(article);
     return article;
 }
@@ -51,20 +54,29 @@ const processError = (error) => {
     setButtons(resultElement.parentElement, true)
 }
 
+const updateStatus = (id, status) => {
+    console.log('Updating: ', id, ' with ', status)
+    const statusElement = document.getElementById(id).querySelector('.status')
+    statusElement.innerText = status;
+}
+
 const createAutomatedPromise = () => {
     const promiseElement = createPromiseElement();
     return new Promise((resolve, reject) => {
         const startTime = new Date();
+        updateStatus(promiseElement.getAttribute('id'), 'pending')
         if (document.querySelector('#throwToggle').checked) {
             throw Error("What do you mean you don't know?");
         }
         setTimeout(() => {
             const result = { timeTaken: elapsedTime(startTime, new Date()), answer: true, id: promiseElement.getAttribute('id') }
+            updateStatus(promiseElement.getAttribute('id'), 'fulfilled(resolve)')
             resolve(result); // Important Bit
         }, getRandomArbitrary(1000, 10000));
 
         setTimeout(() => {
             const result = { timeTaken: elapsedTime(startTime, new Date()), answer: false, id: promiseElement.getAttribute('id')  }
+            updateStatus(promiseElement.getAttribute('id'), 'rejected(reject)')
             reject(result); // Important Bit
         }, getRandomArbitrary(1000, 10000));
     });
@@ -76,16 +88,19 @@ const createManualPromise = () => {
     document.querySelector('.promiseList').appendChild(promiseElement);
     return new Promise((resolve, reject) => {
     const startTime = new Date();
+    updateStatus(promiseElement.getAttribute('id'), 'pending')
     if (document.querySelector('#throwToggle').checked) {
         throw "What do you mean you don't know?";
     }
     setButtons(promiseElement, false);
     promiseElement.querySelector('.resolve').addEventListener('click', () => {
         const result = { timeTaken: elapsedTime(startTime, new Date()), answer: true, id: promiseElement.getAttribute('id') }
+        updateStatus(promiseElement.getAttribute('id'), 'fulfilled(resolve)')
         resolve(result);
     });
     promiseElement.querySelector('.reject').addEventListener('click', () => {
         const result = { timeTaken: elapsedTime(startTime, new Date()), answer: false, id: promiseElement.getAttribute('id')  }
+        updateStatus(promiseElement.getAttribute('id'), 'rejected(reject)')
         reject(result);
         })
     });
