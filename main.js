@@ -1,16 +1,16 @@
 let promises = [];
-let questionCounter = 0;
+let promiseCounter = 0;
 const elapsedTime = (t1, t2) => {
     return t2 - t1;
 }
 const createEntry = () => {
     const disabledButtons = document.querySelector('#automatedPromise').checked;
-    questionCounter++;
+    promiseCounter++;
     const article = document.createElement('article');
     article.classList.add('promise');
-    article.setAttribute('id', `promise${questionCounter}`)
+    article.setAttribute('id', `promise${promiseCounter}`)
     const questionText = document.createElement('span');
-    questionText.innerText = `Promise ${questionCounter}`;
+    questionText.innerText = `Promise ${promiseCounter}`;
     const yesButton = document.createElement('button');
     yesButton.classList.add('yes');
     yesButton.innerText = 'Yes';
