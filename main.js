@@ -46,7 +46,7 @@ const processSuccess = (success) => {
     resultElement.innerText = success['timeTaken']
     resultElement.classList.add('success');
     success.element.querySelector('.resolve').classList.add('success');
-    updateStatus(success.element, 'fulfilled(resolve)')
+    updateStatus(success.element, 'fulfilled')
     setButtons(success.element, true)
 }
 
@@ -55,7 +55,7 @@ const processError = (error) => {
     const resultElement = error.element.querySelector('.result')
     resultElement.innerText = error['timeTaken']
     resultElement.classList.add('error');
-    updateStatus(error.element, 'rejected(reject)')
+    updateStatus(error.element, 'rejected')
     error.element.querySelector('.reject').classList.add('error');
     setButtons(error.element, true)
 }
