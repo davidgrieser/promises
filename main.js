@@ -119,10 +119,9 @@ document.body.querySelector('#createPromise').addEventListener('click', () => {
 
     promise.then((success) => {
         processSuccess(success);
-        console.log('First Then:', promise);
+        console.log('Success Promise:', promise);
     }).catch((error) => {
-        console.log('Catch 1: ', promise);
-        console.log('Error: ', error);
+        console.log('Error Promise: ', promise);
         if(error['name'] === 'Error') {
             console.error(error);
         } else {
