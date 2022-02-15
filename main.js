@@ -75,6 +75,7 @@ const createAutomatedPromise = () => {
         const startTime = new Date();
         updateStatus(promiseElement, 'pending')
         if (document.querySelector('#throwToggle').checked) {
+            updateStatus(promiseElement, 'rejected')
             throw Error("What do you mean you don't know?");
         }
         const success = Math.random() * 100 < 50;
@@ -97,6 +98,7 @@ const createManualPromise = () => {
     const startTime = new Date();
     updateStatus(promiseElement, 'pending')
     if (document.querySelector('#throwToggle').checked) {
+        updateStatus(promiseElement, 'rejected')
         throw Error("What do you mean you don't know?");
     }
     setButtons(promiseElement, false);
