@@ -109,16 +109,23 @@ const createManualPromise = () => {
 document.body.querySelector('#createPromise').addEventListener('click', () => {
     const promiseMethod = document.querySelector('#automatedPromise').checked ? createAutomatedPromise : createManualPromise;
     let promise = promiseMethod();
+    let promise2;
 
     console.log("Promise Created")
     console.log(promise);
 
     promise.then((success) => {
         processSuccess(success);
-        return promiseMethod();
+        console.log('First Then:', promise);
+        promise2 = promiseMethod();
+        return promise2;
     }).then((success) => {
         processSuccess(success);
+        console.log('Second Then:', promise2);
     }).catch((error) => {
+        console.log('Catch 1: ', promise);
+        console.log('Catch 2: ', promise2);
+        console.log('Error: ', error);
         if(error['name'] === 'Error') {
             console.error(error);
         } else {
