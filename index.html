@@ -5,8 +5,18 @@
 </head>
 <body>
     <section class="questions">
-        <button id="createPromise">Promise</button>
-        <input type="checkbox" name="throwToggle" id="throwToggle">
+        <button id="createPromise">Create Promise</button>
+        <h2>Options:</h2>
+        <ul>
+            <li>
+                <label for="throwToggle">Promise Throws?</label>
+                <input type="checkbox" name="throwToggle" id="throwToggle" />
+            </li>
+            <li>
+                <label for="automatedPromise">Automated Promise?</label>
+                <input type="checkbox" name="automatedPromise" id="automatedPromise" />
+            </li>
+        </ul>
     </section>
     <section class="results">
         <article id="correct" class="result"></article>

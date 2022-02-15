@@ -4,6 +4,7 @@ const elapsedTime = (t1, t2) => {
     return t2 - t1;
 }
 const createQuestion = () => {
+    const disabledButtons = document.querySelector('#automatedPromise').checked;
     questionCounter++;
     const article = document.createElement('article');
     article.classList.add('question');
@@ -13,11 +14,11 @@ const createQuestion = () => {
     const yesButton = document.createElement('button');
     yesButton.classList.add('yes');
     yesButton.innerText = 'Yes';
-    yesButton.disabled = true;
+    yesButton.disabled = disabledButtons;
     const noButton = document.createElement('button');
     noButton.classList.add('no');
     noButton.innerText = 'No';
-    noButton.disabled = true;
+    noButton.disabled = disabledButtons;
     const questionResult = document.createElement('span');
     questionResult.classList.add('result')
     article.appendChild(questionText);
@@ -50,14 +51,13 @@ const processError = (error) => {
     setButtons(resultElement.parentElement, true)
 }
 
-const createPromise = () => {
+const createAutomatedPromise = () => {
     const question = createQuestion();
     return new Promise((resolve, reject) => {
         const startTime = new Date();
         if (document.querySelector('#throwToggle').checked) {
             throw Error("What do you mean you don't know?");
         }
-        setButtons(question, false)
         setTimeout(() => {
             const result = { timeTaken: elapsedTime(startTime, new Date()), answer: true, id: question.getAttribute('id') }
             resolve(result); // Important Bit
@@ -71,15 +71,35 @@ const createPromise = () => {
 
 }
 
+const createManualPromise = () => {
+    const question = createQuestion();
+    document.querySelector('.questions').appendChild(question);
+    return new Promise((resolve, reject) => {
+    const startTime = new Date();
+    if (document.querySelector('#throwToggle').checked) {
+        throw "What do you mean you don't know?";
+    }
+    question.querySelector('.yes').addEventListener('click', () => {
+        const result = { timeTaken: elapsedTime(startTime, new Date()), answer: true, id: question.getAttribute('id') }
+        resolve(result);
+    });
+    question.querySelector('.no').addEventListener('click', () => {
+        const result = { timeTaken: elapsedTime(startTime, new Date()), answer: false, id: question.getAttribute('id')  }
+        reject(result);
+        })
+    });
+}
+
 document.body.querySelector('#createPromise').addEventListener('click', () => {
-    let promise = createPromise();
+    const promiseMethod = document.querySelector('#automatedPromise').checked ? createAutomatedPromise : createManualPromise;
+    let promise = promiseMethod();
 
     console.log("Promise Created")
     console.log(promise);
 
     promise.then((success) => {
         processSuccess(success);
-        return createPromise();
+        return promiseMethod();
     }).then((success) => {
         processSuccess(success);
     }).catch((error) => {
