@@ -4,7 +4,7 @@
 <script defer src="main.js" type="text/javascript"></script>
 </head>
 <body>
-    <section class="promiseList">
+    <section>
         <button id="createPromise">Create Promise</button>
         <h2>Options:</h2>
         <ul>
@@ -17,6 +17,18 @@
                 <input type="checkbox" name="automatedPromise" id="automatedPromise" />
             </li>
         </ul>
+    </section>
+    <section>
+        <table>
+            <thead>
+                <th scope="col">Name</th>
+                <th scope="col">Actions</th>
+                <th scope="col">Time(s)</th>
+                <th scope="col">Status</th>
+            </thead>
+            <tbody class="promiseList">
+            </tbody>
+        </table>
     </section>
     <section class="results">
         <article id="correct" class="result"></article>

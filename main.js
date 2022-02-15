@@ -6,11 +6,13 @@ const elapsedTime = (t1, t2) => {
 const createPromiseElement = () => {
     const disabledButtons = true;
     promiseCounter++;
-    const article = document.createElement('article');
-    article.classList.add('promise');
-    article.setAttribute('id', `promise${promiseCounter}`)
-    const promiseText = document.createElement('span');
-    promiseText.innerText = `Promise ${promiseCounter}`;
+    const promiseRow = document.createElement('tr');
+    promiseRow.classList.add('promise');
+    promiseRow.setAttribute('id', `promise${promiseCounter}`)
+    const promiseName = document.createElement('th');
+    promiseName.scope = 'row';
+    promiseName.innerText = `Promise ${promiseCounter}`;
+    const promiseActions = document.createElement('td');
     const resolveButton = document.createElement('button');
     resolveButton.classList.add('resolve');
     resolveButton.innerText = 'Resolve';
@@ -19,17 +21,18 @@ const createPromiseElement = () => {
     rejectButton.classList.add('reject');
     rejectButton.innerText = 'Reject';
     rejectButton.disabled = disabledButtons;
-    const result = document.createElement('span');
+    const result = document.createElement('td');
     result.classList.add('result')
-    const status = document.createElement('span');
+    const status = document.createElement('td');
     status.classList.add('status')
-    article.appendChild(promiseText);
-    article.appendChild(resolveButton);
-    article.appendChild(rejectButton);
-    article.appendChild(result);
-    article.appendChild(status);
-    document.querySelector('.promiseList').appendChild(article);
-    return article;
+    promiseRow.appendChild(promiseName);
+    promiseActions.appendChild(resolveButton);
+    promiseActions.appendChild(rejectButton);
+    promiseRow.appendChild(promiseActions);
+    promiseRow.appendChild(result);
+    promiseRow.appendChild(status);
+    document.querySelector('.promiseList').appendChild(promiseRow);
+    return promiseRow;
 }
 const setButtons = (parentElement, state) => {
     for(let button of parentElement.querySelectorAll('button')){
