@@ -38,3 +38,7 @@ article > button {
 .success {
     color: green;
 }
+
+li {
+    list-style: none;
+}
