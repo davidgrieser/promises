@@ -3,14 +3,14 @@ let questionCounter = 0;
 const elapsedTime = (t1, t2) => {
     return t2 - t1;
 }
-const createQuestion = () => {
+const createEntry = () => {
     const disabledButtons = document.querySelector('#automatedPromise').checked;
     questionCounter++;
     const article = document.createElement('article');
-    article.classList.add('question');
-    article.setAttribute('id', `question${questionCounter}`)
+    article.classList.add('promise');
+    article.setAttribute('id', `promise${questionCounter}`)
     const questionText = document.createElement('span');
-    questionText.innerText = `Question ${questionCounter}`;
+    questionText.innerText = `Promise ${questionCounter}`;
     const yesButton = document.createElement('button');
     yesButton.classList.add('yes');
     yesButton.innerText = 'Yes';
@@ -19,13 +19,13 @@ const createQuestion = () => {
     noButton.classList.add('no');
     noButton.innerText = 'No';
     noButton.disabled = disabledButtons;
-    const questionResult = document.createElement('span');
-    questionResult.classList.add('result')
+    const result = document.createElement('span');
+    result.classList.add('result')
     article.appendChild(questionText);
     article.appendChild(yesButton);
     article.appendChild(noButton);
-    article.appendChild(questionResult);
-    document.querySelector('.questions').appendChild(article);
+    article.appendChild(result);
+    document.querySelector('.promiseList').appendChild(article);
     return article;
 }
 const setButtons = (parentElement, state) => {
@@ -52,7 +52,7 @@ const processError = (error) => {
 }
 
 const createAutomatedPromise = () => {
-    const question = createQuestion();
+    const question = createEntry();
     return new Promise((resolve, reject) => {
         const startTime = new Date();
         if (document.querySelector('#throwToggle').checked) {
@@ -72,8 +72,8 @@ const createAutomatedPromise = () => {
 }
 
 const createManualPromise = () => {
-    const question = createQuestion();
-    document.querySelector('.questions').appendChild(question);
+    const question = createEntry();
+    document.querySelector('.promiseList').appendChild(question);
     return new Promise((resolve, reject) => {
     const startTime = new Date();
     if (document.querySelector('#throwToggle').checked) {
