@@ -41,22 +41,28 @@ function getRandomArbitrary(min, max) {
   }
 
 const processSuccess = (success) => {
+    console.log(success);
     const resultElement = success.element.querySelector('.result')
     resultElement.innerText = success['timeTaken']
     resultElement.classList.add('success');
-    setButtons(resultElement.parentElement, true)
+    success.element.querySelector('.resolve').classList.add('success');
+    updateStatus(success.element, 'fulfilled(resolve)')
+    setButtons(success.element, true)
 }
 
 const processError = (error) => {
+    console.log(error);
     const resultElement = error.element.querySelector('.result')
     resultElement.innerText = error['timeTaken']
     resultElement.classList.add('error');
-    setButtons(resultElement.parentElement, true)
+    updateStatus(error.element, 'rejected(reject)')
+    error.element.querySelector('.reject').classList.add('error');
+    setButtons(error.element, true)
 }
 
-const updateStatus = (id, status) => {
-    console.log('Updating: ', id, ' with ', status)
-    const statusElement = document.getElementById(id).querySelector('.status')
+const updateStatus = (element, status) => {
+    console.log('Updating: ', element.getAttribute('id'), ' with ', status)
+    const statusElement = element.querySelector('.status')
     statusElement.innerText = status;
 }
 
@@ -64,7 +70,7 @@ const createAutomatedPromise = () => {
     const promiseElement = createPromiseElement();
     return new Promise((resolve, reject) => {
         const startTime = new Date();
-        updateStatus(promiseElement.getAttribute('id'), 'pending')
+        updateStatus(promiseElement, 'pending')
         if (document.querySelector('#throwToggle').checked) {
             throw Error("What do you mean you don't know?");
         }
@@ -72,12 +78,8 @@ const createAutomatedPromise = () => {
         setTimeout(() => {
             const result = { timeTaken: elapsedTime(startTime, new Date()), success: success, element: promiseElement };
             if(success) {
-                updateStatus(promiseElement.getAttribute('id'), 'fulfilled(resolve)')
-                promiseElement.querySelector('.resolve').classList.add('success');
                 resolve(result); // Important Bit
             } else {
-                updateStatus(promiseElement.getAttribute('id'), 'rejected(reject)')
-                promiseElement.querySelector('.reject').classList.add('error');
                 reject(result); // Important Bit
             }
         }, getRandomArbitrary(1000, 10000));
@@ -90,21 +92,17 @@ const createManualPromise = () => {
     document.querySelector('.promiseList').appendChild(promiseElement);
     return new Promise((resolve, reject) => {
     const startTime = new Date();
-    updateStatus(promiseElement.getAttribute('id'), 'pending')
+    updateStatus(promiseElement, 'pending')
     if (document.querySelector('#throwToggle').checked) {
         throw "What do you mean you don't know?";
     }
     setButtons(promiseElement, false);
     promiseElement.querySelector('.resolve').addEventListener('click', () => {
         const result = { timeTaken: elapsedTime(startTime, new Date()), success: true, element: promiseElement }
-        promiseElement.querySelector('.resolve').classList.add('success');
-        updateStatus(promiseElement.getAttribute('id'), 'fulfilled(resolve)')
         resolve(result);
     });
     promiseElement.querySelector('.reject').addEventListener('click', () => {
         const result = { timeTaken: elapsedTime(startTime, new Date()), success: false, element: promiseElement }
-        promiseElement.querySelector('.reject').classList.add('error');
-        updateStatus(promiseElement.getAttribute('id'), 'rejected(reject)')
         reject(result);
         })
     });
