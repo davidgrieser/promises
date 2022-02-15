@@ -11,19 +11,19 @@ const createEntry = () => {
     article.setAttribute('id', `promise${promiseCounter}`)
     const questionText = document.createElement('span');
     questionText.innerText = `Promise ${promiseCounter}`;
-    const yesButton = document.createElement('button');
-    yesButton.classList.add('yes');
-    yesButton.innerText = 'Yes';
-    yesButton.disabled = disabledButtons;
-    const noButton = document.createElement('button');
-    noButton.classList.add('no');
-    noButton.innerText = 'No';
-    noButton.disabled = disabledButtons;
+    const resolveButton = document.createElement('button');
+    resolveButton.classList.add('resolve');
+    resolveButton.innerText = 'Resolve';
+    resolveButton.disabled = disabledButtons;
+    const rejectButton = document.createElement('button');
+    rejectButton.classList.add('reject');
+    rejectButton.innerText = 'Reject';
+    rejectButton.disabled = disabledButtons;
     const result = document.createElement('span');
     result.classList.add('result')
     article.appendChild(questionText);
-    article.appendChild(yesButton);
-    article.appendChild(noButton);
+    article.appendChild(resolveButton);
+    article.appendChild(rejectButton);
     article.appendChild(result);
     document.querySelector('.promiseList').appendChild(article);
     return article;
@@ -79,11 +79,11 @@ const createManualPromise = () => {
     if (document.querySelector('#throwToggle').checked) {
         throw "What do you mean you don't know?";
     }
-    question.querySelector('.yes').addEventListener('click', () => {
+    question.querySelector('.resolve').addEventListener('click', () => {
         const result = { timeTaken: elapsedTime(startTime, new Date()), answer: true, id: question.getAttribute('id') }
         resolve(result);
     });
-    question.querySelector('.no').addEventListener('click', () => {
+    question.querySelector('.reject').addEventListener('click', () => {
         const result = { timeTaken: elapsedTime(startTime, new Date()), answer: false, id: question.getAttribute('id')  }
         reject(result);
         })
