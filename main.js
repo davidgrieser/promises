@@ -94,7 +94,7 @@ const createManualPromise = () => {
     const startTime = new Date();
     updateStatus(promiseElement, 'pending')
     if (document.querySelector('#throwToggle').checked) {
-        throw "What do you mean you don't know?";
+        throw Error("What do you mean you don't know?");
     }
     setButtons(promiseElement, false);
     promiseElement.querySelector('.resolve').addEventListener('click', () => {
