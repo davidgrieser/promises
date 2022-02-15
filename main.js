@@ -46,7 +46,7 @@ function getRandomArbitrary(min, max) {
 const processSuccess = (success) => {
     console.log(success);
     const resultElement = success.element.querySelector('.result')
-    resultElement.innerText = success['timeTaken']
+    resultElement.innerText = success['timeTaken'] / 1000;
     resultElement.classList.add('success');
     success.element.querySelector('.resolve').classList.add('success');
     updateStatus(success.element, 'fulfilled')
@@ -56,7 +56,7 @@ const processSuccess = (success) => {
 const processError = (error) => {
     console.log(error);
     const resultElement = error.element.querySelector('.result')
-    resultElement.innerText = error['timeTaken']
+    resultElement.innerText = error['timeTaken'] / 1000;
     resultElement.classList.add('error');
     updateStatus(error.element, 'rejected')
     error.element.querySelector('.reject').classList.add('error');
