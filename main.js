@@ -9,8 +9,8 @@ const createEntry = () => {
     const article = document.createElement('article');
     article.classList.add('promise');
     article.setAttribute('id', `promise${promiseCounter}`)
-    const questionText = document.createElement('span');
-    questionText.innerText = `Promise ${promiseCounter}`;
+    const promiseText = document.createElement('span');
+    promiseText.innerText = `Promise ${promiseCounter}`;
     const resolveButton = document.createElement('button');
     resolveButton.classList.add('resolve');
     resolveButton.innerText = 'Resolve';
@@ -21,7 +21,7 @@ const createEntry = () => {
     rejectButton.disabled = disabledButtons;
     const result = document.createElement('span');
     result.classList.add('result')
-    article.appendChild(questionText);
+    article.appendChild(promiseText);
     article.appendChild(resolveButton);
     article.appendChild(rejectButton);
     article.appendChild(result);
