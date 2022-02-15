@@ -41,14 +41,14 @@ function getRandomArbitrary(min, max) {
   }
 
 const processSuccess = (success) => {
-    const resultElement = document.getElementById(success['id']).querySelector('.result')
+    const resultElement = success.element.querySelector('.result')
     resultElement.innerText = success['timeTaken']
     resultElement.classList.add('success');
     setButtons(resultElement.parentElement, true)
 }
 
 const processError = (error) => {
-    const resultElement = document.getElementById(error['id']).querySelector('.result')
+    const resultElement = error.element.querySelector('.result')
     resultElement.innerText = error['timeTaken']
     resultElement.classList.add('error');
     setButtons(resultElement.parentElement, true)
@@ -70,7 +70,7 @@ const createAutomatedPromise = () => {
         }
         const success = Math.random() * 100 < 50;
         setTimeout(() => {
-            const result = { timeTaken: elapsedTime(startTime, new Date()), success: success, id: promiseElement.getAttribute('id') }
+            const result = { timeTaken: elapsedTime(startTime, new Date()), success: success, element: promiseElement };
             if(success) {
                 updateStatus(promiseElement.getAttribute('id'), 'fulfilled(resolve)')
                 promiseElement.querySelector('.resolve').classList.add('success');
@@ -96,13 +96,13 @@ const createManualPromise = () => {
     }
     setButtons(promiseElement, false);
     promiseElement.querySelector('.resolve').addEventListener('click', () => {
-        const result = { timeTaken: elapsedTime(startTime, new Date()), success: true, id: promiseElement.getAttribute('id') }
+        const result = { timeTaken: elapsedTime(startTime, new Date()), success: true, element: promiseElement }
         promiseElement.querySelector('.resolve').classList.add('success');
         updateStatus(promiseElement.getAttribute('id'), 'fulfilled(resolve)')
         resolve(result);
     });
     promiseElement.querySelector('.reject').addEventListener('click', () => {
-        const result = { timeTaken: elapsedTime(startTime, new Date()), success: false, id: promiseElement.getAttribute('id')  }
+        const result = { timeTaken: elapsedTime(startTime, new Date()), success: false, element: promiseElement }
         promiseElement.querySelector('.reject').classList.add('error');
         updateStatus(promiseElement.getAttribute('id'), 'rejected(reject)')
         reject(result);
