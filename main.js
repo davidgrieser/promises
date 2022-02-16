@@ -1,135 +1,121 @@
-let promises = [];
 let promiseCounter = 0;
-const elapsedTime = (t1, t2) => {
-    return t2 - t1;
-}
-const createPromiseElement = () => {
-    const disabledButtons = true;
-    promiseCounter++;
-    const promiseRow = document.createElement('tr');
-    promiseRow.classList.add('promise');
-    promiseRow.setAttribute('id', `promise${promiseCounter}`)
-    const promiseName = document.createElement('th');
-    promiseName.scope = 'row';
-    promiseName.innerText = `Promise ${promiseCounter}`;
-    const promiseActions = document.createElement('td');
-    const resolveButton = document.createElement('button');
-    resolveButton.classList.add('resolve');
-    resolveButton.innerText = 'Resolve';
-    resolveButton.disabled = disabledButtons;
-    const rejectButton = document.createElement('button');
-    rejectButton.classList.add('reject');
-    rejectButton.innerText = 'Reject';
-    rejectButton.disabled = disabledButtons;
-    const result = document.createElement('td');
-    result.classList.add('result')
-    const status = document.createElement('td');
-    status.classList.add('status')
-    promiseRow.appendChild(promiseName);
-    promiseActions.appendChild(resolveButton);
-    promiseActions.appendChild(rejectButton);
-    promiseRow.appendChild(promiseActions);
-    promiseRow.appendChild(result);
-    promiseRow.appendChild(status);
-    document.querySelector('.promiseList').appendChild(promiseRow);
-    return promiseRow;
-}
-const setButtons = (parentElement, state) => {
-    for(let button of parentElement.querySelectorAll('button')){
-        button.disabled = state;
-    }
-}
-function getRandomArbitrary(min, max) {
-    return Math.random() * (max - min) + min;
-  }
+const throwCheckbox = document.querySelector('#throwToggle');
+const automateCheckbox = document.querySelector('#automatedPromise');
+const promiseList = document.querySelector('.promiseList');
 
-const processSuccess = (success) => {
-    const resultElement = success.element.querySelector('.result')
-    resultElement.innerText = success['timeTaken'] / 1000;
-    resultElement.classList.add('success');
-    success.element.querySelector('.resolve').classList.add('success');
-    updateStatus(success.element, 'fulfilled')
-    setButtons(success.element, true)
-}
-
-const processError = (error) => {
-    const resultElement = error.element.querySelector('.result')
-    resultElement.innerText = error['timeTaken'] / 1000;
-    resultElement.classList.add('error');
-    updateStatus(error.element, 'rejected')
-    error.element.querySelector('.reject').classList.add('error');
-    setButtons(error.element, true)
-}
-
-const updateStatus = (element, status) => {
-    const statusElement = element.querySelector('.status')
-    statusElement.innerText = status;
-}
-
-const createAutomatedPromise = () => {
-    const promiseElement = createPromiseElement();
-    return new Promise((resolve, reject) => {
-        const startTime = new Date();
-        updateStatus(promiseElement, 'pending')
-        if (document.querySelector('#throwToggle').checked) {
-            updateStatus(promiseElement, 'rejected')
-            throw Error("What do you mean you don't know?");
+const createTableRow = function(id, addButtons) {
+    const row = {
+        tr: document.createElement('tr'),
+        resolveButton: document.createElement('button'),
+        rejectButton: document.createElement('button'),
+        timeCell: document.createElement('td'),
+        statusCell: document.createElement('td'),
+        setTime: function(startTime) {
+            this.timeCell.innerText = Date.now() - startTime;
+        },
+        setStatus: function(status) {
+            // Remove any status classes from the TR then add the new one
+            this.tr.className = 'promise';
+            this.tr.classList.add(status);
+            this.statusCell.innerText = status;
+        },
+        disableButtons: function() {
+            this.resolveButton.disabled = true;
+            this.rejectButton.disabled = true;
         }
-        const success = Math.random() * 100 < 50;
-        setTimeout(() => {
-            const result = { timeTaken: elapsedTime(startTime, new Date()), success: success, element: promiseElement };
-            if(success) {
-                resolve(result); // Important Bit
-            } else {
-                reject(result); // Important Bit
-            }
-        }, getRandomArbitrary(1000, 10000));
-    });
+    };
+    
+    row.tr.classList.add('promise');
+    row.tr.title = `Promise ${id}`;
+    row.tr.setAttribute('id', row.tr.title.replace(' ', '').toLowerCase());
 
-}
+    const nameCell = document.createElement('th');
+    nameCell.scope = 'row';
+    nameCell.innerText = row.tr.title;
+    row.tr.appendChild(nameCell);
 
-const createManualPromise = () => {
-    const promiseElement = createPromiseElement();
-    document.querySelector('.promiseList').appendChild(promiseElement);
-    return new Promise((resolve, reject) => {
-    const startTime = new Date();
-    updateStatus(promiseElement, 'pending')
-    if (document.querySelector('#throwToggle').checked) {
-        updateStatus(promiseElement, 'rejected')
-        throw Error("What do you mean you don't know?");
+    const actionsCell = document.createElement('td');
+
+    if(addButtons) {
+        row.resolveButton.classList.add('resolve');
+        row.resolveButton.innerText = 'Resolve';
+        row.rejectButton.classList.add('reject');
+        row.rejectButton.innerText = 'Reject';
+        actionsCell.append(row.resolveButton, row.rejectButton);
+    } else {
+        actionsCell.innerText = 'N/A';
     }
-    setButtons(promiseElement, false);
-    promiseElement.querySelector('.resolve').addEventListener('click', () => {
-        const result = { timeTaken: elapsedTime(startTime, new Date()), success: true, element: promiseElement }
-        resolve(result);
+    
+    row.tr.appendChild(actionsCell);
+
+    row.timeCell.classList.add('time');
+    row.tr.appendChild(row.timeCell);
+
+    row.statusCell.classList.add('status');
+    row.tr.appendChild(row.statusCell);
+    row.setStatus('pending');
+
+    promiseList.appendChild(row.tr);
+    return row;
+};
+
+const createPromise = function(resolveButton, rejectButton) {
+    return new Promise((resolve, reject) => {
+        const startTime = Date.now();
+
+        if(throwCheckbox.checked) {
+            throw Error('OOPS! All berries.');
+        }
+
+        // If any buttons are not provided, create an automated promise
+        if(!resolveButton || !rejectButton) {
+            // Number between 1k and 10k
+            const delay = Math.random() * (10000 - 1000) + 1000; 
+
+            setTimeout(() => {
+                // Automated promises are successful ~50% of the time
+                if(Math.random() * 100 < 50) {
+                    resolve(startTime);
+                } else {
+                    reject(startTime);
+                }
+            }, delay);
+        } else {
+            resolveButton.addEventListener('click', () => resolve(startTime));
+            rejectButton.addEventListener('click', () => reject(startTime));
+        }
     });
-    promiseElement.querySelector('.reject').addEventListener('click', () => {
-        const result = { timeTaken: elapsedTime(startTime, new Date()), success: false, element: promiseElement }
-        reject(result);
-        })
-    });
-}
+};
 
 document.body.querySelector('#createPromise').addEventListener('click', () => {
-    const promiseMethod = document.querySelector('#automatedPromise').checked ? createAutomatedPromise : createManualPromise;
-    let promise = promiseMethod();
+    const automatePromise = automateCheckbox.checked;
 
-    console.log("Promise Created")
-    console.log(promise);
+    // id = next increment of the promise counter
+    // Add buttons if the promise is NOT automated
+    const tableRow = createTableRow(++promiseCounter, !automatePromise);
 
-    promise.then((success) => {
-        processSuccess(success);
-        console.log('Success Promise:', promise);
-    }).catch((error) => {
-        console.log('Error Promise: ', promise);
-        if(error['name'] === 'Error') {
-            console.error(error);
+    let promise;
+    if(automatePromise) {
+        promise = createPromise();
+    } else {
+        promise = createPromise(tableRow.resolveButton, tableRow.rejectButton);
+    }
+
+    promise.then((startMS) => {
+        tableRow.setTime(startMS);
+        tableRow.setStatus('fulfilled');
+    })
+    .catch((result) => {
+        if(typeof result === 'number') {
+            tableRow.setTime(result);
+            tableRow.setStatus('rejected');
         } else {
-            processError(error);
+            tableRow.timeCell.innerText = 'N/A';
+            tableRow.setStatus('exception');
+            tableRow.statusCell.innerText = result.message;
         }
-    }).finally(() => {
-        console.log('Promise Finished');
-        console.log(promise)
+    })
+    .finally(() => {
+        tableRow.disableButtons();
     });
-
-})
+});

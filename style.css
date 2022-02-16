@@ -1,42 +1,6 @@
-section, article {
+section {
     text-align: center;
     vertical-align: middle;
-}
-
-article {
-    margin: 10px;
-}
-
-article > span {
-    margin: 10px;
-}
-
-article > button {
-    margin: 5px;
-}
-
-.box {
-    min-height: 50px;
-    min-width: 50px;
-    display: inline-block;
-}
-
-.blue {
-    background: blue;
-    color: white;
-}
-
-.red {
-    background: red;
-    color: white;
-}
-
-.error {
-    color: red;
-}
-
-.success {
-    color: green;
 }
 
 li {
@@ -66,15 +30,29 @@ th[scope="row"] {
     background-color: #d7d9f2;
 }
 
-caption {
-    padding: 10px;
-    caption-side: bottom;
-}
-
 table {
     border-collapse: collapse;
     border: 2px solid rgb(200, 200, 200);
     letter-spacing: 1px;
     margin: 0 auto;
     width: 75%;
+}
+
+.status {
+    text-transform: capitalize;
+}
+
+tr.fulfilled .status {
+    color: #0a3d01;
+    background: #c4ffd2;
+}
+
+tr.rejected .status {
+    color: #785624;
+    background: #ffe4c4;
+}
+
+tr.exception .status {
+    color: #910909;
+    background: #ffc4c4;
 }
