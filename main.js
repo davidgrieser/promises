@@ -20,8 +20,8 @@ const createTableRow = function(id, addButtons) {
             this.statusCell.innerText = status;
         },
         disableButtons: function() {
-            this.resolveButton.disabled = true;
-            this.rejectButton.disabled = true;
+            if(this.resolveButton) this.resolveButton.disabled = true;
+            if(this.rejectButton) this.rejectButton.disabled = true;
         }
     };
     
@@ -43,6 +43,8 @@ const createTableRow = function(id, addButtons) {
         row.rejectButton.innerText = 'Reject';
         actionsCell.append(row.resolveButton, row.rejectButton);
     } else {
+        row.resolveButton = null;
+        row.rejectButton = null;
         actionsCell.innerText = 'N/A';
     }
     
@@ -67,7 +69,7 @@ const createPromise = function(resolveButton, rejectButton) {
             throw Error('OOPS! All berries.');
         }
 
-        // If any buttons are not provided, create an automated promise
+        // If the buttons are not provided, create an automated promise
         if(!resolveButton || !rejectButton) {
             // Number between 1k and 10k
             const delay = Math.random() * (10000 - 1000) + 1000; 
@@ -94,12 +96,8 @@ document.body.querySelector('#createPromise').addEventListener('click', () => {
     // Add buttons if the promise is NOT automated
     const tableRow = createTableRow(++promiseCounter, !automatePromise);
 
-    let promise;
-    if(automatePromise) {
-        promise = createPromise();
-    } else {
-        promise = createPromise(tableRow.resolveButton, tableRow.rejectButton);
-    }
+    // The buttons will be null if they were not added at creation
+    let promise = createPromise(tableRow.resolveButton, tableRow.rejectButton);
 
     promise.then((startMS) => {
         tableRow.setTime(startMS);
